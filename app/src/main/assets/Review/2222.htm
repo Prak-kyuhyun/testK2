@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+      <title>HTML5, CSS3 and JavaScript demo</title>
+      <style>
+        .class1 {
+        width: 100%;
+        border: 1px solid black;
+        background-color: #FFFFFF;
+        align-content: center;
+        }
+        .class2 {
+        width: 100%;
+        border: 1px solid black;
+        background-color: #FFFFFF;
+        align-content: center;
+        height: auto;
+        overflow: scroll;
+        }
+
+        textarea {
+        overflow: visible;
+        width: 99%;
+        border: 0;
+
+        }
+      </style>
+      <script>
+        // Write JavaScript here
+        var count = 0;
+        function setMessage(arg) {
+        document.getElementById('title').value = arg;
+        }
+
+
+        function sendMessage(msg){
+        window.android.setMessage(msg);
+        }
+
+        function resize(obj) {
+        obj.style.height = "1px";
+        obj.style.height = (20+obj.scrollHeight)+"px";
+        }
+
+        $(document).ready(function () {
+        if (!('url' in window) && ('webkitURL' in window)) {
+        window.URL = window.webkitURL;
+        }
+
+        $('#file').change(function (e) {
+
+        var $canvas = $("<canvas id='" + "canvas" + count + "' alt='fail' align='center' style='width: 50%; height:auto;'>" + "</canvas>");
+        var $tarea = $("<textarea id='" + "tarea" + count + "'>" + "</textarea>");
+        $canvas.appendTo($("#div1"));
+        $tarea.appendTo($("#div1"));
+
+        var can = document.getElementById('canvas'+count);
+        var ctx = can.getContext('2d');
+        var img = new Image();
+
+
+
+        img.src = URL.createObjectURL(e.target.files[0]);
+
+        img.onload = function(){
+        can.width  = img.width;
+        can.height = img.height;
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        var url = can.toDataURL();
+
+        var $iTag = $("<img id='" + "iTag" + count + "' alt='fail' align='center' style='width: 50%; height:auto;'>" + "</img>");
+        $iTag.appendTo($("#div2"));
+        $('#iTag'+count).attr('src', url);
+        };
+        var $pTag = $("<p id='" + "pTag" + count + "' style='width:100%;'>" + "</p>");
+        $pTag.appendTo($("#div2"));
+        count ++;
+        });
+
+        $('#comp').click(function(){
+        var $pTagD = $("<p id='" + "pTagD" + "'>" + "</p>");
+        $pTagD.appendTo($("#div3"));
+        document.getElementById("pTagD").innerHTML = document.getElementById("tareaD").value;
+        for(var i = 0; i < count; i++){
+  document.getElementById("pTag"+i).innerHTML = document.getElementById("tarea"+i).value;
+  }
+  
+  var $content = $('#div2').html();
+  $('#div3').append($content);
+  sendMessage($content);
+  });
+  });
+
+      </script>
+    </head>
+  <body>
+    <input type="text" id="title"  value="" style="width:100%;"/>
+    <input type="file" id="file" name="file" accept="image/*" capture="camera"/>
+    <br/>
+
+    <div  class="class1" id="div1" style="overflow: scroll; width: 100%; height: 350px;">
+      <textarea id="tareaD" onkeyup="resize(this)"></textarea>
+
+    </div>
+    <input type="button" id="comp" value="작성됨" />
+    <div class="calss2" id="div2" style="display:none;"></div>
+    <div class="calss2" id="div3"></div>
+  </body>
+</html>
